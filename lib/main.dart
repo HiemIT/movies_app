@@ -1,21 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/blocs/popular_bloc.dart';
 import 'package:movie_app/pages/home_screen.dart';
+import 'package:provider/provider.dart';
+
+import 'model/popular_view_model.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp( MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final popularBloc= PopularBloc();
+   MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Debug Show',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    popularBloc.fetchAllPopulars();
+    return  StreamProvider( create: (context) => popularBloc.allPopular,
+      initialData: null,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Debug Show',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const HomeScreen(),
       ),
-      home: const HomeScreen(),
     );
   }
 }
